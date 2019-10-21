@@ -63,8 +63,8 @@ Promise.all([
   test = allData;
   var winners = allData[0];
   var teams = allData[1];
-  var w = window.innerWidth*0.6;
-  var h = 900;
+  var w = 800;
+  var h = 400;
   var margin = { top: 15, right: 60, bottom: 60, left: 110 };
   var width = w - margin.left - margin.right;
   var height = h - margin.top - margin.bottom;
@@ -123,8 +123,8 @@ Promise.all([
     .attr('x2', (d) => x(d.end))
     .attr('y1', (d) => y(d.team))
     .attr('y2', (d) => y(d.team))
-    .attr('opacity', '0.75')
-    .attr('stroke-width', '2')
+    .attr('opacity', '0.9')
+    .attr('stroke-width', '3')
     .attr('stroke', (d) => color(d.team))
     .attr('class', 'active_years');
 
@@ -132,16 +132,12 @@ Promise.all([
     .selectAll('winners')
     .data(winners)
     .enter()
-    .append('text')
-    .attr('class', 'trophy')
-    .attr('x', (d) => x(d.year))
-    .attr('y', (d) => y(d.team))
-    .attr('text-anchor', 'middle')
-    .attr('dominant-baseline', 'middle')
-    .attr('font-family', 'FontAwesome')
-    .attr('font-size', '16px')
+    .append('circle')
+    .attr('cx', (d) => x(d.year))
+    .attr('cy', (d) => y(d.team))
+    .attr('r', 4)
     .attr('fill', (d) => color(d.team))
-    .attr('stroke-width', '0.5')
-    .attr('stroke', '#000000')
+    .attr('stroke-width', '0')
+    .attr('stroke', '#333')
     .text(d => '\uf091');
 });
