@@ -139,5 +139,5 @@ Promise.all([
     .attr('fill', (d) => color(d.team))
     .attr('stroke-width', '0')
     .attr('stroke', '#333')
-    .text(d => '\uf091');
+    .text((d) => '\uf091');
 });
