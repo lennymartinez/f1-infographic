@@ -3,7 +3,7 @@ var rowConverter = function (d) {
     team: d.team,
     years_competing: +d.years_competing,
     championships: +d.championships,
-    winningest: +d.winningest,
+    winningest: Math.log10(+d.winningest),
     rank: +d.rank
   };
 };
@@ -37,7 +37,7 @@ d3.csv('data/data.csv', rowConverter, function (data) {
   var swarm = d3.beeswarm()
     .data(data)
     .distributeOn(function (d) {
-      return x(d.winningest);
+      return -1 - x(d.winningest);
     })
     .radius(function (d) {
       return r(d.championships);
@@ -59,8 +59,8 @@ d3.csv('data/data.csv', rowConverter, function (data) {
       return h / 2;
     })
     .attr('r', function (bee) {
-      // return r(bee.datum.championships);
-      return 4;
+      return r(bee.datum.championships);
+      // return 4;
     })
     .style('fill', 'rgba(0,0,0,0.2)');
 });
