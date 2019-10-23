@@ -48,7 +48,8 @@ d3.csv('data/data.csv', rowConverter, function (data) {
   const simulation = d3.forceSimulation(swarm);
   simulation.force('collide', d3.forceCollide((d) => r(d.datum.championships)).iterations(20));
   simulation.force('x', d3.forceX((d) => d.x));
-  simulation.force('y', d3.forceY((d) => d.y));
+  simulation.force('y', d3.forceY(h / 2));
+  // simulation.force('y', d3.forceY((d) => d.y));
   simulation.stop();
   simulation.tick(100);
   const nodes = simulation.nodes();
