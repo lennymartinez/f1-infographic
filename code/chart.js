@@ -63,7 +63,7 @@ Promise.all([
   test = allData;
   var winners = allData[0];
   var teams = allData[1];
-  var w = window.innerWidth*0.6;
+  var w = window.innerWidth * 0.6;
   var h = 900;
   var margin = { top: 15, right: 60, bottom: 60, left: 110 };
   var width = w - margin.left - margin.right;
