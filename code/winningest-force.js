@@ -5,7 +5,7 @@ var rowConverter = function (d) {
     winning: +d.winningest
   };
 };
-var test;
+var test, dog;
 d3.csv('data/data.csv', rowConverter, function (data) {
   // test = data;
   var w = 800;
@@ -26,6 +26,10 @@ d3.csv('data/data.csv', rowConverter, function (data) {
     .domain([0, 1])
     .range([0, width]);
 
+  var logX = d3.scaleLog()
+    .domain([0.1, 1])
+    .range([10, width]);
+
   // r scale
   var r = d3.scaleLinear()
     .domain([1, 15])
@@ -35,7 +39,7 @@ d3.csv('data/data.csv', rowConverter, function (data) {
   var swarm = d3.beeswarm()
     .data(data)
     .distributeOn(function (d) {
-      return x(d.winning);
+      return logX(d.winning);
     })
     .radius(function (d) {
       // return r(d.championships);
@@ -44,16 +48,34 @@ d3.csv('data/data.csv', rowConverter, function (data) {
     .orientation('horizontal')
     .side('symmetric')
     .arrange();
-  test = swarm;
   const simulation = d3.forceSimulation(swarm);
   simulation.force('collide', d3.forceCollide((d) => r(d.datum.championships)).iterations(20));
   simulation.force('x', d3.forceX((d) => d.x));
-  simulation.force('y', d3.forceY(h / 2));
+  simulation.force('y', d3.forceY((d) => d.y));
   // simulation.force('y', d3.forceY((d) => d.y));
   simulation.stop();
   simulation.tick(100);
   const nodes = simulation.nodes();
 
+  test = nodes;
+  dog = swarm;
+
+  // draw the nodes
+  svg
+    .selectAll('circles')
+    .data(nodes)
+    .enter()
+    .append('circle')
+    .attr('cx', function (d) {
+      return d.x;
+    })
+    .attr('cy', function (d) {
+      return h / 2;
+    })
+    .attr('r', function (d) {
+      return r(d.datum.championships);
+    })
+    .style('fill', 'rgba(0,0,0,0.2)');
   // draw the swarm
   // svg.selectAll('circle')
   //   .data(swarm)
