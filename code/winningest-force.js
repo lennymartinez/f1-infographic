@@ -2,7 +2,8 @@ var rowConverter = function (d) {
   return {
     team: d.team,
     championships: +d.championships,
-    winning: +d.winningest
+    winning: +d.winningest,
+    log_win: +d.log_win
   };
 };
 
@@ -19,16 +20,16 @@ var color = d3
     'Williams',
     'Mercedes',
     'Lotus',
-    'Red Bull',
+    'RedBull',
     'Brabham',
     'Renault',
     'Cooper',
     'Benetton',
     'Tyrrell',
-    'Alfa Romeo',
+    'AlfaRomeo',
     'BRM',
     'Matra',
-    'Brawn GP',
+    'Brawn',
     'Maserati'
   ])
   .range([
@@ -51,7 +52,7 @@ var color = d3
   ]);
 
 var test_swarm, test_nodes;
-d3.csv('data/data.csv', rowConverter, function (data) {
+d3.csv('data/data_expanded.csv', rowConverter, function (data) {
   // test = data;
   var w = 800;
   var h = 400;
@@ -71,58 +72,87 @@ d3.csv('data/data.csv', rowConverter, function (data) {
     .domain([0, 1])
     .range([0, width]);
 
-  var xlog = d3.scaleLog()
-    .domain([0.1, 1])
+  var logX = d3.scaleLinear()
+    .domain([-1.35, 0])
     .range([0, width]);
 
+  var xlog = d3.scaleLog()
+    .domain([0.045, 1])
+    .range([0, width]);
   // r scale
   var r = d3.scaleLinear()
     .domain([1, 15])
     .range([10, 100]);
 
   // generate the swarm
-  var swarm = d3.beeswarm()
-    .data(data)
-    .distributeOn(function (d) {
-      return xlog(d.winning);
-    })
-    .radius(function (d) {
-      return r(d.datum.championships);
-    })
-    .orientation('horizontal')
-    .side('symmetric')
-    .arrange();
+  // var swarm = d3.beeswarm()
+  //   .data(data)
+  //   .distributeOn(function (d) {
+  //     return logX(d.log_win);
+  //   })
+  //   .radius(function (d) {
+  //     return r(d.datum.championships);
+  //   })
+  //   .orientation('horizontal')
+  //   .side('symmetric')
+  //   .arrange();
 
-  test_swarm = swarm;
+  // test_swarm = swarm;
+
   // do a simulation
-  const simulation = d3.forceSimulation(swarm);
-  simulation.force(
-    'collide',
-    d3.forceCollide((d) => r(d.datum.championships)).iterations(20)
-  );
-  simulation.force('x', d3.forceX((d) => d.x));
-  simulation.force('y', d3.forceY((d) => d.y)
-  );
-  simulation.stop();
-  simulation.tick(100);
-  const nodes = simulation.nodes();
+  // const simulation = d3.forceSimulation(swarm);
+  // simulation.force(
+  //   'collide',
+  //   d3.forceCollide((d) => r(d.datum.championships)).iterations(20)
+  // );
+  // simulation.force('x', d3.forceX((d) => d.x));
+  // simulation.force('y', d3.forceY((d) => d.y)
+  // );
+  // simulation.stop();
+  // simulation.tick(100);
+  // const nodes = simulation.nodes();
 
-  test_nodes = nodes;
+  // test_nodes = nodes;
 
   // draw the nodes
+  // svg
+  //   .selectAll('circles')
+  //   .data(swarm)
+  //   .enter()
+  //   .append('circle')
+  //   .attr('cx', function (d) {
+  //     return d.x;
+  //   })
+  //   .attr('cy', function (d) {
+  //     return h / 2;
+  //   })
+  //   .attr('r', function (d) {
+  //     return r(d.datum.championships);
+  //   })
+  //   .attr('class', function (d) {
+  //     return d.datum.team;
+  //   })
+  //   .style('fill', (d) => color(d.datum.team));
+
   svg
     .selectAll('circles')
-    .data(nodes)
+    .data(data)
     .enter()
     .append('circle')
+    // .attr('cx', function(d) {
+    //   return logX(d.log_win);
+    // })
     .attr('cx', function (d) {
-      return d.x;
+      return xlog(d.winning);
     })
     .attr('cy', function (d) {
       return h / 2;
     })
     .attr('r', function (d) {
-      return r(d.datum.championships);
+      return r(d.championships);
     })
-    .style('fill', (d) => color(d.datum.team));
+    .attr('class', function (d) {
+      return d.team;
+    })
+    .style('fill', (d) => color(d.team));
 });
