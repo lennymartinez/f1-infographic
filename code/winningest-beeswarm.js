@@ -1,4 +1,4 @@
-var rowConverter = function (d) {
+var rowConverter = function(d) {
   return {
     team: d.team,
     championships: +d.championships,
@@ -8,7 +8,7 @@ var rowConverter = function (d) {
 };
 
 var test_swarm, test_nodes;
-d3.csv('data/data_expanded.csv', rowConverter, function (data) {
+d3.csv('data/data_expanded.csv', rowConverter, function(data) {
   // test = data;
   var w = 500;
   var h = 400;
@@ -24,24 +24,35 @@ d3.csv('data/data_expanded.csv', rowConverter, function (data) {
     .attr('transform', `translate(${margin.left},${margin.top})`);
 
   // x scale
-  var x = d3.scaleLinear()
+  var x = d3
+    .scaleLinear()
     .domain([0, 1])
     .range([0, width]);
 
-  var logX = d3.scaleLinear()
+  var logX = d3
+    .scaleLinear()
     .domain([-1.35, 0])
     .range([0, width]);
 
-  var xlog = d3.scaleLog()
-    .domain([0.045, 1])
+  var xlog = d3
+    .scaleLog()
+    .domain([0.01, 1])
     .range([0, width]);
+
   // r scale
-  var r = d3.scaleLinear()
+  var r = d3
+    .scaleLinear()
     .domain([1, 15])
     .range([10, 100]);
 
+  var x_axis = d3.axisBottom().scale(xlog);
 
-  
+  svg
+    .append('g')
+    .attr('class', 'x axis')
+    .attr('transform', 'translate(0,' + height + ')')
+    .call(x_axis);
+
   // generate the swarm
   // var swarm = d3.beeswarm()
   //   .data(data)
@@ -100,14 +111,14 @@ d3.csv('data/data_expanded.csv', rowConverter, function (data) {
     // .attr('cx', function(d) {
     //   return logX(d.log_win);
     // })
-    .attr('cx', function (d) {
+    .attr('cx', function(d) {
       return xlog(d.winning);
     })
-    .attr('cy', function (d) {
+    .attr('cy', function(d) {
       return h / 2;
     })
     .attr('r', 4)
-    .attr('class', function (d) {
+    .attr('class', function(d) {
       return d.team;
     })
     .style('fill', '#515151');
