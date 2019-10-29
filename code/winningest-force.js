@@ -1,4 +1,4 @@
-var rowConverter = function (d) {
+var rowConverter = function(d) {
   return {
     team: d.team,
     championships: +d.championships,
@@ -7,52 +7,14 @@ var rowConverter = function (d) {
   };
 };
 
-function getRandomInt (min, max) {
+function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min; // The maximum is inclusive and the minimum is inclusive
 }
-var color = d3
-  .scaleOrdinal()
-  .domain([
-    'Ferrari',
-    'McLaren',
-    'Williams',
-    'Mercedes',
-    'Lotus',
-    'RedBull',
-    'Brabham',
-    'Renault',
-    'Cooper',
-    'Benetton',
-    'Tyrrell',
-    'AlfaRomeo',
-    'BRM',
-    'Matra',
-    'Brawn',
-    'Maserati'
-  ])
-  .range([
-    '#DC0300',
-    '#FB8703',
-    '#2086C0',
-    '#2ED2BE',
-    '#555555',
-    '#2041FF',
-    '#F4D258',
-    '#FDF503',
-    '#004225',
-    '#00A204',
-    '#800080',
-    '#9B0502',
-    '#8b4513',
-    '#f08080',
-    '#80f080',
-    '#ff682a'
-  ]);
 
 var test_swarm, test_nodes;
-d3.csv('data/data_expanded.csv', rowConverter, function (data) {
+d3.csv('data/data_expanded.csv', rowConverter, function(data) {
   // test = data;
   var w = 800;
   var h = 400;
@@ -68,19 +30,23 @@ d3.csv('data/data_expanded.csv', rowConverter, function (data) {
     .attr('transform', `translate(${margin.left},${margin.top})`);
 
   // x scale
-  var x = d3.scaleLinear()
+  var x = d3
+    .scaleLinear()
     .domain([0, 1])
     .range([0, width]);
 
-  var logX = d3.scaleLinear()
+  var logX = d3
+    .scaleLinear()
     .domain([-1.35, 0])
     .range([0, width]);
 
-  var xlog = d3.scaleLog()
+  var xlog = d3
+    .scaleLog()
     .domain([0.045, 1])
     .range([0, width]);
   // r scale
-  var r = d3.scaleLinear()
+  var r = d3
+    .scaleLinear()
     .domain([1, 15])
     .range([10, 100]);
 
@@ -142,16 +108,16 @@ d3.csv('data/data_expanded.csv', rowConverter, function (data) {
     // .attr('cx', function(d) {
     //   return logX(d.log_win);
     // })
-    .attr('cx', function (d) {
+    .attr('cx', function(d) {
       return xlog(d.winning);
     })
-    .attr('cy', function (d) {
+    .attr('cy', function(d) {
       return h / 2;
     })
-    .attr('r', function (d) {
+    .attr('r', function(d) {
       return r(d.championships);
     })
-    .attr('class', function (d) {
+    .attr('class', function(d) {
       return d.team;
     })
     .style('fill', (d) => color(d.team));

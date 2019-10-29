@@ -1,12 +1,52 @@
 var rowConverter = (d) => {
   return {
     team: d.team,
+    years: d.years_competing,
     championships: +d.championships,
     winning: +d.winningest
   };
 };
 
-var theSwarm;
+var swarmTest;
+
+var color = d3
+  .scaleOrdinal()
+  .domain([
+    'Ferrari',
+    'McLaren',
+    'Williams',
+    'Mercedes',
+    'Lotus',
+    'RedBull',
+    'Brabham',
+    'Renault',
+    'Cooper',
+    'Benetton',
+    'Tyrrell',
+    'AlfaRomeo',
+    'BRM',
+    'Matra',
+    'Brawn',
+    'Maserati'
+  ])
+  .range([
+    '#DC0300',
+    '#FB8703',
+    '#2086C0',
+    '#2ED2BE',
+    '#555555',
+    '#2041FF',
+    '#F4D258',
+    '#FDF503',
+    '#004225',
+    '#00A204',
+    '#800080',
+    '#9B0502',
+    '#8b4513',
+    '#f08080',
+    '#80f080',
+    '#ff682a'
+  ]);
 
 d3.csv('data/data_expanded.csv', rowConverter, (data) => {
   // test = data;
@@ -40,24 +80,24 @@ d3.csv('data/data_expanded.csv', rowConverter, (data) => {
     .domain([1, 15])
     .range([10, 100]);
 
-  var yearScale = d3
+  var opacityScale = d3
     .scaleLinear()
-    .domain([0])
+    .domain([1, 70])
     .range([0.3, 1]);
 
-  var x_axis = d3.axisBottom().scale(xlog);
+  var xAxis = d3.axisBottom().scale(xlog);
 
   svg
     .append('g')
     .attr('class', 'x axis')
     .attr('transform', 'translate(0,' + height + ')')
-    .call(x_axis);
+    .call(xAxis);
 
   // generate the swarm
   var swarm = d3
     .beeswarm()
     .data(data)
-    .distributeOn(function (d) {
+    .distributeOn((d) => {
       return xlog(d.winning);
     })
     .radius(20)
@@ -65,7 +105,7 @@ d3.csv('data/data_expanded.csv', rowConverter, (data) => {
     .side('symmetric')
     .arrange();
 
-  test_swarm = swarm;
+  swarmTest = swarm;
 
   // do a simulation
   // const simulation = d3.forceSimulation(swarm);
@@ -88,16 +128,16 @@ d3.csv('data/data_expanded.csv', rowConverter, (data) => {
   //   .data(swarm)
   //   .enter()
   //   .append('circle')
-  //   .attr('cx', function (d) {
+  //   .attr('cx', (d) =>  {
   //     return d.x;
   //   })
-  //   .attr('cy', function (d) {
+  //   .attr('cy', (d) =>  {
   //     return h / 2;
   //   })
-  //   .attr('r', function (d) {
+  //   .attr('r', (d) =>  {
   //     return r(d.datum.championships);
   //   })
-  //   .attr('class', function (d) {
+  //   .attr('class', (d) =>  {
   //     return d.datum.team;
   //   })
   //   .style('fill', (d) => color(d.datum.team));
@@ -107,15 +147,20 @@ d3.csv('data/data_expanded.csv', rowConverter, (data) => {
     .data(swarm)
     .enter()
     .append('circle')
-    .attr('cx', function (d) {
+    .attr('cx', (d) => {
       return d.x;
     })
-    .attr('cy', function (d) {
+    .attr('cy', (d) => {
       return h / 2;
     })
     .attr('r', 15)
-    .attr('class', function (d) {
+    .attr('class', (d) => {
       return d.datum.team;
     })
-    .style('fill', '#515151');
+    .style('opacity', (d) => {
+      return opacityScale(d.datum.years);
+    })
+    .style('fill', (d) => {
+      return color(d.datum.team);
+    });
 });
