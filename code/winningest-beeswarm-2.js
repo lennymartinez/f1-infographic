@@ -1,15 +1,14 @@
-var rowConverter = function (d) {
+var rowConverter = (d) => {
   return {
     team: d.team,
     championships: +d.championships,
-    winning: +d.winningest,
-    log_win: +d.log_win
+    winning: +d.winningest
   };
 };
-var f;
 
-var test_swarm, test_nodes;
-d3.csv('data/data_expanded.csv', rowConverter, function (data) {
+var theSwarm;
+
+d3.csv('data/data_expanded.csv', rowConverter, (data) => {
   // test = data;
   var w = 900;
   var h = 400;
@@ -30,11 +29,6 @@ d3.csv('data/data_expanded.csv', rowConverter, function (data) {
     .domain([0, 1])
     .range([0, width]);
 
-  var logX = d3
-    .scaleLinear()
-    .domain([-1.35, 0])
-    .range([0, width]);
-
   var xlog = d3
     .scaleLog()
     .domain([0.01, 1])
@@ -45,6 +39,11 @@ d3.csv('data/data_expanded.csv', rowConverter, function (data) {
     .scaleLinear()
     .domain([1, 15])
     .range([10, 100]);
+
+  var yearScale = d3
+    .scaleLinear()
+    .domain([0])
+    .range([0.3, 1]);
 
   var x_axis = d3.axisBottom().scale(xlog);
 
