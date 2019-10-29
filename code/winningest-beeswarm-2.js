@@ -1,4 +1,4 @@
-var rowConverter = function(d) {
+var rowConverter = function (d) {
   return {
     team: d.team,
     championships: +d.championships,
@@ -9,9 +9,9 @@ var rowConverter = function(d) {
 var f;
 
 var test_swarm, test_nodes;
-d3.csv('data/data_expanded.csv', rowConverter, function(data) {
+d3.csv('data/data_expanded.csv', rowConverter, function (data) {
   // test = data;
-  var w = 500;
+  var w = 900;
   var h = 400;
   var margin = { top: 15, right: 60, bottom: 60, left: 110 };
   var width = w - margin.left - margin.right;
@@ -58,10 +58,10 @@ d3.csv('data/data_expanded.csv', rowConverter, function(data) {
   var swarm = d3
     .beeswarm()
     .data(data)
-    .distributeOn(function(d) {
+    .distributeOn(function (d) {
       return xlog(d.winning);
     })
-    .radius(40)
+    .radius(20)
     .orientation('horizontal')
     .side('symmetric')
     .arrange();
@@ -108,14 +108,14 @@ d3.csv('data/data_expanded.csv', rowConverter, function(data) {
     .data(swarm)
     .enter()
     .append('circle')
-    .attr('cx', function(d) {
+    .attr('cx', function (d) {
       return d.x;
     })
-    .attr('cy', function(d) {
+    .attr('cy', function (d) {
       return h / 2;
     })
     .attr('r', 15)
-    .attr('class', function(d) {
+    .attr('class', function (d) {
       return d.datum.team;
     })
     .style('fill', '#515151');
