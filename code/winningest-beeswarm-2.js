@@ -30,22 +30,22 @@ var color = d3
     'Maserati'
   ])
   .range([
-    '#DC0300',
-    '#FB8703',
-    '#2086C0',
-    '#2ED2BE',
-    '#555555',
-    '#2041FF',
-    '#F4D258',
-    '#FDF503',
-    '#004225',
-    '#00A204',
-    '#800080',
-    '#9B0502',
-    '#8b4513',
-    '#f08080',
-    '#80f080',
-    '#ff682a'
+    '#DC0300', // ferrari
+    '#FB8703', // mclaren
+    '#2086C0', // williams
+    '#2ED2BE', // mercedes
+    '#555555', // lotus
+    '#2041FF', // redbull
+    '#F4D258', // brabham
+    '#FDF503', // renault
+    '#004225', // cooper
+    '#00A204', // benetton
+    '#800080', // tyrrell
+    '#9B0502', // alfa
+    '#8b4513', // brm
+    '#f08080', // matra
+    '#80f080', // brawn
+    '#ff682a' // maserati
   ]);
 
 d3.csv('data/data_expanded.csv', rowConverter, (data) => {
